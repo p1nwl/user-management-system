@@ -97,4 +97,39 @@ const login = (req, res) => {
   });
 };
 
-module.exports = { register, login };
+const resetPasswordRequest = (req, res) => {
+  const { email } = req.body;
+  if (!email) {
+    return res.status(400).json({ message: "Email is required" });
+  }
+  const findUserQuery = "SELECT id FROM users WHERE email = $1";
+  db.query(findUserQuery, [email], (findErr, findRes) => {
+    if (findErr) {
+      console.error("Error finding user for password reset:", findErr);
+      return res.status(500).json({ message: "Error processing request" });
+    }
+    if (findRes.rows.length === 0) {
+      return res.json({
+        message:
+          'If an account exists for this email, a password reset link would be sent. (In a real app, an email would be sent.) For this demo, the password has been reset to "newpassword123".',
+      });
+    }
+
+    const userId = findRes.rows[0].id;
+    const newPassword = "newpassword123";
+    const hashedNewPassword = bcrypt.hashSync(newPassword, 10);
+    const updatePasswordQuery =
+      "UPDATE users SET password_hash = $1 WHERE id = $2";
+    db.query(updatePasswordQuery, [hashedNewPassword, userId], (updateErr) => {
+      if (updateErr) {
+        console.error("Error updating password:", updateErr);
+        return res.status(500).json({ message: "Error resetting password" });
+      }
+      res.json({
+        message: `Password for ${email} has been reset. The new temporary password is: ${newPassword}. Please change it after logging in.`,
+      });
+    });
+  });
+};
+
+module.exports = { register, login, resetPasswordRequest };
