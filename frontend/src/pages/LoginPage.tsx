@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Alert, InputGroup } from "react-bootstrap";
 import "../styles/LoginPage.css";
 import { MdAccountCircle, MdLock } from "react-icons/md";
+import { SiGoogle, SiFacebook, SiDiscord, SiTelegram } from "react-icons/si";
 import { loginUser } from "../utils/apiClients";
 import type { LoginCredentials } from "../utils/apiClients";
 import axios from "axios";
@@ -10,9 +11,17 @@ import axios from "axios";
 const LoginPage: React.FC = () => {
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [rememberMe, setRememberMe] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const [loading, setLoading] = useState(false);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.classList.add("auth-page-bg");
+    return () => {
+      document.body.classList.remove("auth-page-bg");
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -49,12 +58,7 @@ const LoginPage: React.FC = () => {
   };
 
   return (
-    <div
-      className="d-flex align-items-center justify-content-center vh-100"
-      style={{
-        background: "linear-gradient(to right, #4e63d7 0%, #76bfe9 100%)",
-      }}
-    >
+    <div className="d-flex align-items-center justify-content-center vh-100">
       <div className="container">
         <div className="row">
           <div className="col-md-11 mx-md-auto">
@@ -140,6 +144,19 @@ const LoginPage: React.FC = () => {
                             Forgot password ?
                           </Link>
                         </div>
+                        <div className="col-12">
+                          <Form.Group
+                            controlId="formBasicRememberMe"
+                            className="mb-3"
+                          >
+                            <Form.Check
+                              type="checkbox"
+                              label="Remember me"
+                              checked={rememberMe}
+                              onChange={(e) => setRememberMe(e.target.checked)}
+                            />
+                          </Form.Group>
+                        </div>
                         <div className="col-12 mt-4">
                           <Button
                             variant=""
@@ -163,6 +180,17 @@ const LoginPage: React.FC = () => {
                         </div>
                       </div>
                     </Form>
+                    <div className="d-md-none mt-3 text-center">
+                      <p className="mb-0">
+                        First time here?{" "}
+                        <Link
+                          to="/register"
+                          className="text-primary text-decoration-none"
+                        >
+                          Sign up
+                        </Link>
+                      </p>
+                    </div>
                   </div>
                 </div>
                 <div className="col-md-6 d-none d-md-flex align-items-center">
@@ -188,27 +216,35 @@ const LoginPage: React.FC = () => {
                       </Link>
                     </div>
                     <h5 className="c-black mb-4 mt-n1">Or Sign In With</h5>
-                    <div className="socials">
+                    <div className="socials d-flex align-items-center">
                       <a
                         href="#"
-                        className="zmdi zmdi-facebook text-decoration-none mx-1"
-                        style={{ fontSize: "24px", color: "#3b5998" }}
-                      ></a>
+                        className="text-decoration-none mx-1"
+                        style={{ fontSize: "24px" }}
+                      >
+                        <SiGoogle />
+                      </a>
                       <a
                         href="#"
-                        className="zmdi zmdi-twitter text-decoration-none mx-1"
-                        style={{ fontSize: "24px", color: "#1da1f2" }}
-                      ></a>
+                        className="text-decoration-none mx-1"
+                        style={{ fontSize: "24px" }}
+                      >
+                        <SiFacebook />
+                      </a>
                       <a
                         href="#"
-                        className="zmdi zmdi-google text-decoration-none mx-1"
-                        style={{ fontSize: "24px", color: "#db4437" }}
-                      ></a>
+                        className="text-decoration-none mx-1"
+                        style={{ fontSize: "24px" }}
+                      >
+                        <SiDiscord />
+                      </a>
                       <a
                         href="#"
-                        className="zmdi zmdi-instagram text-decoration-none mx-1"
-                        style={{ fontSize: "24px", color: "#c13584" }}
-                      ></a>
+                        className="text-decoration-none mx-1"
+                        style={{ fontSize: "24px" }}
+                      >
+                        <SiTelegram />
+                      </a>
                     </div>
                   </div>
                 </div>

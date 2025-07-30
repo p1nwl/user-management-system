@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { useNavigate, Link } from "react-router-dom";
 import { Form, Button, Alert, InputGroup } from "react-bootstrap";
 import "../styles/LoginPage.css";
 import { MdAccountCircle, MdEmail, MdLock } from "react-icons/md";
+import { SiGoogle, SiFacebook, SiDiscord, SiTelegram } from "react-icons/si";
 import axios from "axios";
 import { registerUser } from "../utils/apiClients";
 import type { RegisterCredentials } from "../utils/apiClients";
@@ -15,6 +16,13 @@ const RegisterPage: React.FC = () => {
   const [loading, setLoading] = useState(false);
   const [successMessage, setSuccessMessage] = useState<string | null>(null);
   const navigate = useNavigate();
+
+  useEffect(() => {
+    document.body.classList.add("auth-page-bg");
+    return () => {
+      document.body.classList.remove("auth-page-bg");
+    };
+  }, []);
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -55,12 +63,7 @@ const RegisterPage: React.FC = () => {
   };
 
   return (
-    <div
-      className="d-flex align-items-center justify-content-center vh-100"
-      style={{
-        background: "linear-gradient(to right, #4e63d7 0%, #76bfe9 100%)",
-      }}
-    >
+    <div className="d-flex align-items-center justify-content-center vh-100">
       <div className="container">
         <div className="row">
           <div className="col-md-11 mx-md-auto">
@@ -197,7 +200,7 @@ const RegisterPage: React.FC = () => {
                         </div>
                       </div>
                     </Form>
-                    <div className="mt-3 text-center">
+                    <div className="d-md-none mt-3 text-center">
                       <p className="mb-0">
                         Already have an account?{" "}
                         <Link
@@ -233,27 +236,35 @@ const RegisterPage: React.FC = () => {
                       </Link>
                     </div>
                     <h5 className="c-black mb-4 mt-n1">Or Sign Up With</h5>
-                    <div className="socials">
+                    <div className="socials d-flex align-items-center">
                       <a
                         href="#"
-                        className="zmdi zmdi-facebook text-decoration-none mx-1"
-                        style={{ fontSize: "24px", color: "#3b5998" }}
-                      ></a>
+                        className="text-decoration-none mx-1"
+                        style={{ fontSize: "24px" }}
+                      >
+                        <SiGoogle />
+                      </a>
                       <a
                         href="#"
-                        className="zmdi zmdi-twitter text-decoration-none mx-1"
-                        style={{ fontSize: "24px", color: "#1da1f2" }}
-                      ></a>
+                        className="text-decoration-none mx-1"
+                        style={{ fontSize: "24px" }}
+                      >
+                        <SiFacebook />
+                      </a>
                       <a
                         href="#"
-                        className="zmdi zmdi-google text-decoration-none mx-1"
-                        style={{ fontSize: "24px", color: "#db4437" }}
-                      ></a>
+                        className="text-decoration-none mx-1"
+                        style={{ fontSize: "24px" }}
+                      >
+                        <SiDiscord />
+                      </a>
                       <a
                         href="#"
-                        className="zmdi zmdi-instagram text-decoration-none mx-1"
-                        style={{ fontSize: "24px", color: "#c13584" }}
-                      ></a>
+                        className="text-decoration-none mx-1"
+                        style={{ fontSize: "24px" }}
+                      >
+                        <SiTelegram />
+                      </a>
                     </div>
                   </div>
                 </div>
